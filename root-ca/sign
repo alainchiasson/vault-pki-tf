@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+set -euxo pipefail
+
+readonly ROOT_CA_KEY="key/Testing_Root.key"
+readonly ROOT_CA_CRT="crt/Testing_Root.crt"
+readonly CODESIGN_TTL=1825 # 5 years
+
+readonly CA1_CSR="csr/Test_Org_v1_ICA1_v1.csr"
+readonly CA1_CRT="crt/Test_Org_v1_ICA1_v1.pem"
+
+openssl x509 \
+    -req -in $CA1_CSR \
+    -out $CA1_CRT \
+    -days "$CODESIGN_TTL" \
+    -CA "$ROOT_CA_CRT" \
+    -CAkey "$ROOT_CA_KEY" \
+    -CAcreateserial \
+    -extfile "root-ca/extensions.conf" \
+    -extensions testing_root
