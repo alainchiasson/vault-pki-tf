@@ -19,15 +19,16 @@ locals {
 # count = var.include_ec2_instance ? 1 : 0
 
  active_issuer = [ for s in local.issuer_start_dates : split("T", s)[0] if timecmp(s, plantimestamp()) < 0 ]
- last_issuer = reverse(keys(tomap( { for s in local.active_issuer: s => s} )))[0]
+ //last_issuer = reverse(keys(tomap( { for s in local.active_issuer: s => s} )))[0]
 }
 
 output "active_issuer_tuple" {
     value = local.active_issuer
 }
 
+/*
 output "last_issuer" {
     value = local.last_issuer
 }
-
+*/
 
