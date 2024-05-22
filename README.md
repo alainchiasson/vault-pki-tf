@@ -7,8 +7,6 @@ this is a mashup of two things :
 
 # Modified Steps
 
-
-
 generate a root ca
 
     bash root-ca/generate
@@ -22,17 +20,9 @@ Run Terraform to create endpoint
     terraform init
     terraform apply
 
-Extract CSR from Run 
-
-terraform show -json | jq '.values["root_module"]["resources"][].values.csr' -r | grep -v null > csr/Test_Org_v1_ICA1_v1.csr
-
-Now create the Certificate
+Extract, sign and create chain.
 
     bash root-ca/sign
-
-Create the Chain 
-
-    cat crt/Test_Org_v1_ICA1_v1.pem crt/Testing_Root.crt > cacerts/test_org_v1_ica1_v1.crt
 
 Now modify terraform to upload the chain
 
@@ -45,5 +35,17 @@ This code creates the stack gradually, but we also build up the code. We need to
 1. Generate ICA1 - and set cert if Cert is present. ( instead of manually adding code.)
 2. For ICA2, Get ICA1 as data, insterad of resource.
 3. For Roles - do the same, read as DATA. 
+
+# These were the original steps 
+
+terraform show -json | jq '.values["root_module"]["resources"][].values.csr' -r | grep -v null > csr/Test_Org_v1_ICA1_v1.csr
+
+Now create the Certificate
+
+    bash root-ca/sign
+
+Create the Chain 
+
+    cat crt/Test_Org_v1_ICA1_v1.pem crt/Testing_Root.crt > cacerts/test_org_v1_ica1_v1.crt
 
 
